@@ -9,3 +9,7 @@ Auf diese Weise erhoffe ich mir ein größeres Verständnis des Aufbaus von Akko
 ### How do I get set up? ###
 
 Man benötigt einige Dinge, um die Übersetzung durchzuführen. Typescript und den YuiCompressor sowie nAnt. Das gute daran ist, es sind alles Cross Platform Tools. Gesteuert wird der Vorgang über die build Datei im Root. Das Ergebnis ist ein sehr sauberer Webbuild ohne den ganzen Dateikram, der nicht notwendig ist, aber für die Entwicklung gut aussieht.
+
+### Use it using github pages!
+
+https://stho32.github.io/Guitar-Fretboard/source/index.html
