@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project name="Gitarren-Fretboard" default="build" basedir=".">
+    <description>Erstellung der Gitarren-Fretboard-Distribution</description>
+    <property name="Typescript" value="tsc" />
+    <property name="YuiCompressor" value="/Users/shoff/node_modules/yuicompressor/build/yuicompressor-2.4.8.jar" />
+
+
+    <target name="build">
+        <echo>Wegräumen von allem, was im Weg herumliegt.</echo>
+
+        <delete dir="dist" failonerror="false" />
+
+        <echo>Verzeichnisstruktur erstellen</echo>
+
+        <mkdir dir="dist" />
+        <mkdir dir="dist/css" />
+        <mkdir dir="dist/js" />
+        <mkdir dir="dist/fonts" />
+
+        <echo>Schriftarten kopieren</echo>
+
+        <copy todir="dist/fonts">
+            <fileset basedir="source/fonts">
+                <include name="*" />
+            </fileset>
+        </copy>
+
+        <echo>CSS zusammenfassen</echo>
+        <!-- Wenn wir die Zusammenfassung auf diese Weise schreiben, dann
+             ist die Reihenfolge der Dateien definiert. -->
+        <concat destfile="source/css/combined.css" append="false"><fileset><include name="source/css/bootstrap.min.css"/></fileset></concat>
+        <concat destfile="source/css/combined.css" append="true"><fileset><include name="source/css/bootstrap-theme.min.css"/></fileset></concat>
+
+        <!-- Verkleinern -->
+        <exec program="java">
+            <arg line="-jar ${YuiCompressor}" />
+            <arg value="source/css/combined.css" />
+            <arg value="-o" />
+            <arg value="source/css/combined.min.css" />
+        </exec>
+
+        <!-- Herausgeben -->
+        <copy file="source/css/combined.min.css" tofile="dist/css/combined.min.css" />
+
+        <echo>Typescript übersetzen</echo>
+
+        <exec program="${Typescript}"><arg line="-t ES5 --out source/js/fretboard.js source/js/fretboard.ts" /></exec>
+
+        <echo>JS zusammenfassen</echo>
+        <!-- Wenn wir die Zusammenfassung auf diese Weise schreiben, dann
+            ist die Reihenfolge der Dateien definiert. -->
+        <concat destfile="source/js/combined.js" append="false"><fileset><include name="source/js/jquery.min.js"/></fileset></concat>
+        <concat destfile="source/js/combined.js" append="true"><fileset><include name="source/js/bootstrap.min.js"/></fileset></concat>
+        <concat destfile="source/js/combined.js" append="true"><fileset><include name="source/js/fretboard.js"/></fileset></concat>
+
+        <!-- Verkleinern -->
+        <exec program="java"><arg line="-jar ${YuiCompressor} source/js/combined.js -o source/js/combined.min.js" /></exec>
+
+        <!-- Herausgeben -->
+        <copy file="source/js/combined.min.js" tofile="dist/js/combined.min.js" />
+
+        <copy file="source/index.html" tofile="dist/index.html" />
+    </target>
+
+
+</project>
